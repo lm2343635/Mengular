@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>Mengular.js Example</title>
+		<link href="static/css/bootstrap.min.css" rel="stylesheet">
+		<link href="static/css/mengular.css" rel="stylesheet">
+		<link href="static/css/index.css" rel="stylesheet">
+		<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+		<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+		<!--[if lt IE 9]>
+		  <script src="http://cdn.bootcss.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+		  <script src="http://cdn.bootcss.com/respond.js/1.4.2/respond.min.js"></script>
+		<![endif]-->
+		<script src="static/js/jquery.min.js"></script>	
+		<script src="static/js/bootstrap.min.js"></script>
+		<script src="static/js/mengular.js"></script>
+		<script src="static/js/mengular-2.0.js"></script>
+		<script src="static/js/index.js"></script>	
+	</head>
+	<body>
+		<div id="main-container" class="container">
+			<div class="alert alert-success" role="alert">Megular Function 1</div>
+			<table id="student-table1" class="table">
+				<thead>
+					<tr>
+						<th>Student Number</th>
+						<th>Name</th>
+						<th>Class Name</th>
+						<th>Country</th>
+						<th>Province</th>
+						<th>City</th>
+						<th>Birthday</th>
+						<th>Delete</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr id="${id}$">
+						<td>${number}$</td>
+						<td>${name}$</td>
+						<td>${classname}$</td>
+						<td>${hometown.country}$</td>
+						<td>${hometown.province}$</td>
+						<td>${hometown.city}$</td>
+						<td>${birthday}$</td>
+						<td><button class="btn btn-danger btn-xs">Delete</button></td>
+					</tr>
+				</tbody>
+			</table>
+
+			<div class="alert alert-success" role="alert">Megular Function 2</div>
+			<table id="student-table2" class="table">
+				<thead>
+					<tr>
+						<th>Student Number</th>
+						<th>Name</th>
+						<th>Class Name</th>
+						<th>Country</th>
+						<th>Province</th>
+						<th>City</th>
+						<th>Birthday</th>
+						<th>Delete</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr id="${id}$" class="mengular-template templateClass1">
+						<td>${number}$</td>
+						<td>${name}$</td>
+						<td>${classname}$</td>
+						<td>${hometown.country}$</td>
+						<td>${hometown.province}$</td>
+						<td>${hometown.city}$</td>
+						<td>${birthday}$</td>
+						<td><button class="btn btn-danger btn-xs">Delete</button></td>
+					</tr>
+					<tr id="${id}$" class="mengular-template templateClass2">
+						<td>${number}$</td>
+						<td>${name}$</td>
+						<td>${classname}$</td>
+						<td>${hometown.country}$</td>
+						<td>${hometown.province}$</td>
+						<td>${hometown.city}$</td>
+						<td>${birthday}$</td>
+						<td><button class="btn btn-warning btn-xs">Delete</button></td>
+					</tr>
+				</tbody>
+			</table>
+
+			<div class="alert alert-success" role="alert">
+				Megular 2.0
+				<button class="btn btn-xs btn-info pull-right" onclick="$('#student-table3 tbody').mengularClear()">Clear</button>
+			</div>
+			<table id="student-table3" class="table">
+				<thead>
+					<tr>
+						<th>Student Number</th>
+						<th>Name</th>
+						<th>Class Name</th>
+						<th>Country</th>
+						<th>Province</th>
+						<th>City</th>
+						<th>Birthday</th>
+						<th>Delete</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr id="${id}$" class="mengular-template student-table-template1">
+						<td>${number}$</td>
+						<td>${name}$</td>
+						<td>${classname}$</td>
+						<td>${hometown.country}$</td>
+						<td>${hometown.province}$</td>
+						<td>${hometown.city}$</td>
+						<td>${birthday}$</td>
+						<td><button class="btn btn-danger btn-xs">Delete</button></td>
+					</tr>
+					<tr id="${id}$" class="mengular-template student-table-template2">
+						<td>${number}$</td>
+						<td>${name}$</td>
+						<td>${classname}$</td>
+						<td>${hometown.country}$</td>
+						<td>${hometown.province}$</td>
+						<td>${hometown.city}$</td>
+						<td>${birthday}$</td>
+						<td><button class="btn btn-warning btn-xs">Delete</button></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</body>
+</html>

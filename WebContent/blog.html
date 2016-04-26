@@ -1,0 +1,91 @@
+<!DOCTYPE HTML>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>Blog Article</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+		<link rel="Shortcut Icon" href="static/images/favicon.ico">
+		<link href="static/css/bootstrap.min.css" rel="stylesheet"/>
+		<link href="static/css/bootstrap.photo.css" rel="stylesheet"/>
+		<link href="static/css/font-awesome.min.css" rel="stylesheet"/>
+		<link href="static/css/docs.min.css" rel="stylesheet"/>
+		<link href="static/css/style.css" rel="stylesheet"/>
+		<link href="static/css/mengular.css" rel="stylesheet"/>
+		<link href="static/css/blog.css" rel="stylesheet"/>
+		<script src="static/js/jquery.min.js"></script>
+		<script src="static/js/bootstrap.min.js"></script>
+		<script src="static/js/jquery.bootstrap.min.js"></script>
+		<script src="static/js/mengular-2.0.js"></script>
+		<script src="static/js/tools.js"></script>
+		<script src="dwr/engine.js"></script>
+        <script src="dwr/interface/BlogManager.js"></script>
+        <script src="dwr/interface/CommentManager.js"></script>
+		<script src="static/js/blog.js"></script>
+	</head>
+	<body>
+		<div id="home" class="header">
+			<div class="top-header">
+				<div class="container">
+					<div class="logo">
+						<a href="index.html"><img src="static/images/logo.png"/></a>
+					</div>
+					<h1 class="pull-right" style="line-height: 45px; font-size: 25px;"><a href="index.html" style="color: #fff; text-decoration: none;">Home</a></h1>
+					<div class="clearfix"> </div>
+					<h2 class="text-center">#{blog-title}</h2>
+					<h4 class="text-center">Create in #{blog-date}, #{blog-readers} readers</h4>
+				</div>
+			</div>
+		</div>
+		<div class="container">
+			<div id="blog-content">#{blog-content}</div>
+			<div class="page-header">
+                <h3 class="text-info">Visitor Comments</h3>
+            </div>
+            <h4 id="no-comment" class="text-muted">There is no comment now.</h4>
+            <div id="comment-list" class="container">
+				<div id="${cid}$" class="bs-callout mengular-template comment-list-template">
+					<div class="row">
+						<div class="col-xs-12 col-sm-10">
+							<h4 class="text-success">${name}$</h4>
+						</div>
+						<div class="col-xs-12 col-sm-2">
+							<h4 class="pull-right text-warning">${date}$</h4>
+						</div>
+					</div>
+					<hr>
+					<p class="text-muted">${content}$</p>
+				</div>
+			</div>	
+			<div class="page-header">
+                <h3 class="text-info">Write a Comment</h3>
+            </div>
+            <div id="add-blog-comment" class="row">
+            	<div class="col-xs-12">
+                    <div class="input-group">
+                        <span class="input-group-addon form-icon"><i class="fa fa-sticky-note-o fa-lg"></i></span>
+                        <textarea id="add-comment-content" class="form-control" placeholder="Write your comment here." rows="8"></textarea>
+                    </div>
+            	</div>
+            	<div class="col-xs-12 col-sm-8">
+            		<div class="input-group">
+                        <span class="input-group-addon form-icon"><i class="fa fa-user fa-lg"></i></span>
+                        <input id="add-comment-name" type="text" class="form-control" placeholder="Your Name">
+                    </div>
+            	</div>
+            	<div class="col-xs-6 col-sm-2">
+            		<button id="add-comment-clear" class="btn btn-default btn-block">Clear</button>
+            	</div>
+            	<div class="col-xs-6 col-sm-2">
+            		<button id="add-comment-submit" class="btn btn-success btn-block">Submit</button>
+            	</div>
+            </div>
+            <a href="blogs.html" class="btn btn-block btn-lg btn-info" style="margin: 30px 0;">Back to Blogs</a>
+		</div>
+		<div class="copy-right text-center">
+			<div class="container">
+				<p>Made by Meng Li. <a href="admin.html" target="_blank">Manage My Blog</a></p>
+				<label>Copyright of Meng Li @ 2014-2016. All rights reserved. 鄂ICP备15010075号-1</label>
+			</div>
+		</div>
+	</body>
+</html>

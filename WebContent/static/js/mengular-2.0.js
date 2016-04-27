@@ -4,7 +4,7 @@
  * Powerful jQuery plugin for ajax table loading.
  *
  * (c) 2015 Lidaye, http://fczm.pw
- * XWKJ Licensed
+ * Jingmen Xinwang Science and Technology Development Co., Ltd. Licensed
  */
 
 (function($) {
@@ -17,6 +17,10 @@
 
 	$.fn[_mengular]=function(template, item) {
 		var templateHtml=$(template).prop("outerHTML");
+		if(templateHtml==""||templateHtml==undefined) {
+			throw new Error("Template not found! Check template name and try again.")
+			return;
+		}
 		var htmlArray=templateHtml.split(LEFT_SPLIT_STR);
 		var attributeNames=new Array();
 		for(var i=1;i<htmlArray.length;i++) 

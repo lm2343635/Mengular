@@ -8,6 +8,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class MengularDocument {
 	//定义模板文件默认文字编码为UTF-8
@@ -19,6 +22,9 @@ public class MengularDocument {
 	
 	private boolean readTemplateSuccess;
 	private String document;
+	private List<String> paragraphs;
+	private List<String> templates;
+	private List<String> ids;
 	
 	public String getRootPath() {
 		return rootPath;
@@ -57,26 +63,64 @@ public class MengularDocument {
 	 * @param templateCharacterEncoding 自定义文字编码
 	 */
 	private void init(String templatePath, int depth, String templateCharacterEncoding) {
-		File template=new File(rootPath+templatePath);
-		if(!template.isFile()||!template.exists()) {
+		File templateFile=new File(rootPath+templatePath);
+		if(!templateFile.isFile()||!templateFile.exists()) {
 			readTemplateSuccess=false;
 			return;
 		}
 		try {
-			InputStreamReader streamReader=new InputStreamReader(new FileInputStream(template), templateCharacterEncoding);
+			InputStreamReader streamReader=new InputStreamReader(new FileInputStream(templateFile), templateCharacterEncoding);
 			BufferedReader bufferedReader=new BufferedReader(streamReader);
 			String line=null;
 			document="";
+			paragraphs=new ArrayList<>();
+			templates=new ArrayList<>();
+			ids=new ArrayList<>();
+			String paragraph="", template="";
+			boolean isTemplate=false;
 			while((line=bufferedReader.readLine())!=null) {
-				document+=line+"\n";
+				if(line.contains("<!--mengular-start")) {
+					paragraphs.add(paragraph);
+					paragraph="";
+					isTemplate=true;
+					ids.add(line.split("id=\"")[1].split("\"")[0]);
+					continue;
+				}
+				if(line.contains("<!--mengular-end-->")) {
+					templates.add(template);
+					template="";
+					isTemplate=false;
+					continue;
+				}
+				if(isTemplate) {
+					template+=line+"\n";
+				} else {
+					paragraph+=line+"\n";
+				}
 			}
+			paragraphs.add(paragraph);
 			bufferedReader.close();
 			readTemplateSuccess=true;
-			String back="";
-			for(int i=0; i<depth; i++) {
-				back+="../";
+//			String back="";
+//			for(int i=0; i<depth; i++) {
+//				back+="../";
+//			}
+//			document=document.replace("href=\"", "href=\""+back).replace("src=\"", "src=\""+back);
+			
+			for(String s: paragraphs) {
+				System.out.println(s);
+				System.out.println();
 			}
-			document=document.replace("href=\"", "href=\""+back).replace("src=\"", "src=\""+back);
+			
+			for(String s: templates) {
+				System.out.println(s);
+				System.out.println();
+			}
+			
+			for(String id: ids) {
+				System.out.println(id);
+			}
+			
 		} catch (IOException e) {
 			readTemplateSuccess=false;
 			e.printStackTrace();
@@ -92,6 +136,10 @@ public class MengularDocument {
 		if(readTemplateSuccess) {
 			document=document.replace("#{"+key+"}", value);
 		}
+	}
+	
+	public void setLoop(String id, List<Map<String, String>> items) {
+		
 	}
 	
 	/**

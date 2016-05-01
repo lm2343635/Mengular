@@ -43,18 +43,35 @@
             </div>
             <h4 id="no-comment" class="text-muted">There is no comment now.</h4>
             <div id="comment-list" class="container">
-				<div id="${cid}$" class="bs-callout mengular-template comment-list-template" data-mengular="comment-list">
+            	<!--mengular-start id="comment-list"-->
+				<div id="#{cid}#" class="bs-callout">
 					<div class="row">
 						<div class="col-xs-12 col-sm-10">
-							<h4 class="text-success">${name}$</h4>
+							<h4 class="text-success">#{name}#</h4>
 						</div>
 						<div class="col-xs-12 col-sm-2">
-							<h4 class="pull-right text-warning">${date}$</h4>
+							<h4 class="pull-right text-warning">#{date}#</h4>
 						</div>
 					</div>
 					<hr>
-					<p class="text-muted">${content}$</p>
+					<p class="text-muted">#{content}#</p>
 				</div>
+				<!--mengular-end-->
+			</div>	
+			<div id="friend-list" class="container">
+            	<!--mengular-start id="friend-list"-->
+				<div id="#{fid}#" class="bs-callout">
+					<div class="row">
+						<div class="col-xs-12 col-sm-10">
+							<h4 class="text-success">#{name}#</h4>
+						</div>
+						<div class="col-xs-12 col-sm-2">
+							<h4 class="pull-right text-warning">#{age}#</h4>
+						</div>
+					</div>
+					<hr>
+				</div>
+				<!--mengular-end-->
 			</div>	
 			<div class="page-header">
                 <h3 class="text-info">Write a Comment</h3>

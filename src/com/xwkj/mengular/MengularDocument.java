@@ -11,6 +11,8 @@ import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
+import java.util.TreeMap;
 
 public class MengularDocument {
 	//定义模板文件默认文字编码为UTF-8
@@ -19,19 +21,20 @@ public class MengularDocument {
 	public final static String DEFAULT_OUTPUT_CHARACTER_ENCODING="UTF-8";
 	
 	private String rootPath;
+	private int depth;
 	
-	private boolean readTemplateSuccess;
+	//是否允许设置loop，一旦设置占位符后会生成整体文档，不允许生成loop
+	private boolean setLoopEnable=true;
 	private String document;
+	//模板根据loop部分拆分后的段落
 	private List<String> paragraphs;
-	private List<String> templates;
-	private List<String> ids;
+	//模板列表，包括id和模板内容
+	private SortedMap<String, String> templates;
+	//循环输出列表，包括id和输出内容
+	private SortedMap<String, String> loops;
 	
 	public String getRootPath() {
 		return rootPath;
-	}
-
-	public boolean isReadTemplateSuccess() {
-		return readTemplateSuccess;
 	}
 	
 	/**
@@ -62,34 +65,42 @@ public class MengularDocument {
 	 * @param templatePath 模板文件路径
 	 * @param templateCharacterEncoding 自定义文字编码
 	 */
+	@SuppressWarnings("resource")
 	private void init(String templatePath, int depth, String templateCharacterEncoding) {
+		this.depth=depth;
 		File templateFile=new File(rootPath+templatePath);
 		if(!templateFile.isFile()||!templateFile.exists()) {
-			readTemplateSuccess=false;
+			try {
+				throw new Exception("Mengular Document: Template file not found.");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 			return;
 		}
 		try {
 			InputStreamReader streamReader=new InputStreamReader(new FileInputStream(templateFile), templateCharacterEncoding);
 			BufferedReader bufferedReader=new BufferedReader(streamReader);
 			String line=null;
-			document="";
 			paragraphs=new ArrayList<>();
-			templates=new ArrayList<>();
-			ids=new ArrayList<>();
-			String paragraph="", template="";
+			templates=new TreeMap<>();
+			String paragraph="", template="", key=null;
 			boolean isTemplate=false;
 			while((line=bufferedReader.readLine())!=null) {
 				if(line.contains("<!--mengular-start")) {
 					paragraphs.add(paragraph);
 					paragraph="";
 					isTemplate=true;
-					ids.add(line.split("id=\"")[1].split("\"")[0]);
+					key=line.split("mengular-start=\"")[1].split("\"")[0];
 					continue;
 				}
 				if(line.contains("<!--mengular-end-->")) {
-					templates.add(template);
+					if(key==null) {
+						throw new Exception("No mengular start tag found!");
+					}
+					templates.put(key, template);
 					template="";
 					isTemplate=false;
+					key=null;
 					continue;
 				}
 				if(isTemplate) {
@@ -100,29 +111,12 @@ public class MengularDocument {
 			}
 			paragraphs.add(paragraph);
 			bufferedReader.close();
-			readTemplateSuccess=true;
-//			String back="";
-//			for(int i=0; i<depth; i++) {
-//				back+="../";
-//			}
-//			document=document.replace("href=\"", "href=\""+back).replace("src=\"", "src=\""+back);
 			
-			for(String s: paragraphs) {
-				System.out.println(s);
-				System.out.println();
+			loops=new TreeMap<>();
+			for(String k: templates.keySet()) {
+				loops.put(k, "");
 			}
-			
-			for(String s: templates) {
-				System.out.println(s);
-				System.out.println();
-			}
-			
-			for(String id: ids) {
-				System.out.println(id);
-			}
-			
-		} catch (IOException e) {
-			readTemplateSuccess=false;
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -133,13 +127,56 @@ public class MengularDocument {
 	 * @param value 占位符值
 	 */
 	public void setValue(String key, String value) {
-		if(readTemplateSuccess) {
-			document=document.replace("#{"+key+"}", value);
+		//如果设置可以循环，则关闭设置循环并生成整体文档
+		if(setLoopEnable) {
+			setLoopEnable=false;
+			document="";
+			for(String paragraph: paragraphs) {
+				document+=paragraph;
+				if(loops.size()>0) {
+					document+=loops.get(loops.firstKey());
+					loops.remove(loops.firstKey());
+				}
+			}
+			String back="";
+			for(int i=0; i<depth; i++) {
+				back+="../";
+			}
+			document=document.replace("href=\"", "href=\""+back).replace("src=\"", "src=\""+back);
 		}
+		document=document.replace("#{"+key+"}", value);
 	}
 	
+	/**
+	 * 填充循环
+	 * @param id 循环id
+	 * @param items 循环值
+	 */
 	public void setLoop(String id, List<Map<String, String>> items) {
-		
+		if(!setLoopEnable) {
+			try {
+				throw new Exception("Mengular Document: Cannot set loop after setting placeholder value.");
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		String template=templates.get(id);
+		if(template==null) {
+			try {
+				throw new Exception("Mengular Document: Cannot found template where id="+id);
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		String loop, document="";
+		for(Map<String, String> item: items) {
+			loop=template;
+			for(String key: item.keySet()) {
+				loop=loop.replace("#{"+key+"}#", item.get(key));
+			}
+			document+=loop;
+		}
+		loops.put(id, loops.get(id)+"\n"+document);
 	}
 	
 	/**
@@ -156,9 +193,6 @@ public class MengularDocument {
 	 * @param outputCharacterEncoding 自定义输出文件文字编码
 	 */
 	public void output(String outputPath, String outputCharacterEncoding) {
-		if(!readTemplateSuccess) {
-			return;
-		}
 		File output=new File(rootPath+outputPath);
 		try {
 			if (!output.exists()) {

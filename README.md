@@ -162,6 +162,10 @@ Now, we consider an other problem. If we want to reload this table with new data
 	for(var i in testData) {
 		$('#student-table3 tbody').mengular(".student-table-template1",testData[i]);
 	}
+###Clear Template
+Sometimes, we hope to remove template doucment after loading JSON array, just use `clearTemplate()` method.
+	
+	$("#student-table3 tbody").clearTemplate();
 ###Fill Text and Fill Value
 We provided other two functions of `fillText(data)` and `fillValue(data)` which can fill text and value of dom. The parameter data is a JSON object like this:
 
@@ -175,5 +179,58 @@ We provided other two functions of `fillText(data)` and `fillValue(data)` which 
 The key `id` is the id of dom element. The method `fillValue(data)` can only be used for `<input>` element.
 ## Part Two: Java Template Engine
 **Java Template Engin** provids a simple way for using template engine. Compared to many Java Template Engine, Mengular is very simple because it only provided two methods. One of them is filling text by placeholder, the other is looping templates just like **JS Ajax Loading** introduced above.
+
+Mengular Java Template Engine provides two functions of **Loop** and **Set Key**. **Loop** just like the function of JS Ajax Loaing introduced above, but it runs on the Java Web Server. **Set Key** can replace all the placehoders to values we want to replace. We can use this function in our Java source code to generate static HTML document and save this Document to your Web Application Folder.
 ###Prepare Template HTML Document
-Mengular Java Template Engine provides two functions of Loop and Set Key. Loop just like the function of JS Ajax Loaing introduced above, but it runs on the Java Web Server. We can use this function in our Java source code to generate static HTML document and save this Document to your Web Application Folder.
+We need to use palceholder to indicate what we want to replace. For **Loop**, we use `#{key}#` as its placeholder, and for **Set key**, we use `#{key}` which is similar to the placeholder `${key}$` of **JS Ajax Loading** introduced above. 
+
+Especially, we have to use flag `<!--mengular-start="template-id"-->` and `<!--mengular-end-->` which represent the start and end line of template document, in order to indicate the template before using **Loop**. There may be more than one template in our HTML document, thus, we use `template-id` to distingush them.
+####Demo Document for Loop	
+
+	<div id="comment-list" class="container">
+    	<!--mengular-start="comment-list"-->
+		<div id="#{cid}#" class="bs-callout">
+			<div class="row">
+				<div class="col-xs-12 col-sm-10">
+					<h4 class="text-success">#{name}#</h4>
+				</div>
+				<div class="col-xs-12 col-sm-2">
+					<h4 class="pull-right text-warning">#{date}#</h4>
+				</div>
+			</div>
+			<hr>
+			<p class="text-muted">#{content}#</p>
+		</div>
+		<!--mengular-end-->
+	</div>	
+####Demo Document for Set Key
+
+	<h2 class="text-center">#{blog-title}</h2>
+	<h4 class="text-center">Create in #{blog-date}, #{blog-readers} readers</h4>
+At last, save your template in your web application folder.
+###Init MengularDoucment
+We provides two constructer for MengularDocument:
+
+	/**
+	 * Using default template file character encoding to init MengularDocument
+	 * @param rootPath The root path of we Application
+	 * @param templatePath The path of template HTML Document file
+	 */
+	public MengularDocument(String rootPath, int depth, String templatePath);
+	
+	/**
+	 * Using custom template file character encoding to init MengularDocument
+	 * @param rootPath The root path of we Application
+	 * @param templatePath The path of template HTML Document file
+	 * @param templateCharacterEncoding Custem template file character encoding
+	 */
+	public MengularDocument(String rootPath, int depth, String templatePath, String templateCharacterEncoding)  
+
+We can get root path of web appliation in Servlet using
+
+	//Servlet
+	String rootPath=getServletConfig().getServletContext().getRealPath("/");
+or in DWR using
+
+	//DWR Framework
+	String rootPath=WebContextFactory.get().getServletContext().getRealPath("/");

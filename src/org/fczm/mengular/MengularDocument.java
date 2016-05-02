@@ -22,6 +22,7 @@ public class MengularDocument {
 	
 	private String rootPath;
 	private int depth;
+	private String outputPath;
 	
 	//是否允许设置loop，一旦设置占位符后会生成整体文档，不允许生成loop
 	private boolean setLoopEnable=true;
@@ -40,23 +41,29 @@ public class MengularDocument {
 	/**
 	 * 使用默认模板文件文字编码的构造方法
 	 * @param rootPath Web项目根目录
+	 * @param depth 相对深度
 	 * @param templatePath 模板文件路径
+	 * @param outputPath 输出文件路径
 	 */
-	public MengularDocument(String rootPath, int depth, String templatePath) {
+	public MengularDocument(String rootPath, int depth, String templatePath, String outputPath) {
 		super();
-		this.rootPath = rootPath;
+		this.rootPath=rootPath;
+		this.outputPath=outputPath;
 		init(templatePath, depth, DEFAULT_TEMPLATE_CHARACTER_ENCODING);
 	}
 
 	/**
 	 * 自定义模板文件文字编码的构造方法
 	 * @param rootPath Web项目根目录
+	 * @param depth 相对深度
 	 * @param templatePath 模板文件路径
+	 * @param outputPath 输出文件路径
 	 * @param templateCharacterEncoding 自定义文字编码
 	 */
-	public MengularDocument(String rootPath, int depth, String templatePath, String templateCharacterEncoding) {
+	public MengularDocument(String rootPath, int depth, String templatePath, String outputPath, String templateCharacterEncoding) {
 		super();
 		this.rootPath = rootPath;
+		this.outputPath=outputPath;
 		init(templatePath,  depth, templateCharacterEncoding);
 	}
 	
@@ -183,16 +190,15 @@ public class MengularDocument {
 	 * 使用默认文字编码输出
 	 * @param outputPath 输出文件路径
 	 */
-	public void output(String outputPath) {
-		output(outputPath, DEFAULT_OUTPUT_CHARACTER_ENCODING);
+	public void output() {
+		output(DEFAULT_OUTPUT_CHARACTER_ENCODING);
 	}
 	
 	/**
 	 * 自定义文字编码输出
-	 * @param outputPath 输出文件路径
 	 * @param outputCharacterEncoding 自定义输出文件文字编码
 	 */
-	public void output(String outputPath, String outputCharacterEncoding) {
+	public void output(String outputCharacterEncoding) {
 		File output=new File(rootPath+outputPath);
 		try {
 			if (!output.exists()) {

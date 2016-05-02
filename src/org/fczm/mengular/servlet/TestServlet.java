@@ -1,4 +1,4 @@
-package com.xwkj.mengular.servlet;
+package org.fczm.mengular.servlet;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.xwkj.mengular.MengularDocument;
+import org.fczm.mengular.MengularDocument;
 
 /**
  * Servlet implementation class TestServlet

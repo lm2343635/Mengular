@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title></title>
+		<link href="static/css/bootstrap.min.css" rel="stylesheet">
+		<link href="static/css/mengular.css" rel="stylesheet">
+		<script src="static/js/jquery.min.js"></script>	
+		<script src="static/js/Math.uuid.js"></script>
+		<script src="static/js/mengular.js"></script>
+		<script type="text/javascript">
+
+			var MAX_ROWS = 1000;
+			var MAX_EVENTS = 10;
+			$(document).ready(function() {
+
+				var data = new Array();
+				var result = new Array();
+
+				for(var i = 100; i <= MAX_ROWS; i += 100) {
+					for(var j = i - 100; j < i; j ++) {
+						data[j] = {
+							id: Math.uuid(),
+							attribute_1: "This is attribute_1",
+							attribute_2: "This is attribute_2",
+							attribute_3: "This is attribute_3",
+							attribute_4: "This is attribute_4"
+						}
+					}
+
+					result[i/100-1] = new Array();
+					for(var events = 1; events <= MAX_EVENTS; events ++) {
+						$("#example-list").mengularClear();
+						result[i/100-1][events-1] = testRunTime(function() {
+							$("#example-list").mengular(".example-list-template", data);
+
+							for(var k in data) {
+								for(var l = 1; l < events; l++) {
+									$("#" + data[k].id).click(function() {
+										console.log("Bind click event " + l + ", id = " + $(this).mengularId());
+									});
+								}
+								
+							}
+						});
+						console.log("Run json array time test for " + i + " rows and " + events + " events in " + result[i/100-1][events-1] + "ms.");
+					}
+				}
+				
+				for(var i = 0; i < result.length; i ++) {
+					var item = "";
+					for(var j = 0; j < result[i].length; j ++) {
+						item += result[i][j] + " ";
+					}
+					console.log(item);
+				}
+
+			});
+
+			/**
+			 * Test function run time
+			 * @param func
+			 * @returns {Number}
+			 */
+			function testRunTime(func) {
+				var start = new Date().getTime();
+			    func();
+			    var end = new Date().getTime();
+
+				return end-start;
+			}
+		</script>
+	</head>
+	<body>
+		<div class="container">
+			<table class="table">
+				<thead>
+					<tr>
+						<th>attribute_1</th>
+						<th>attribute_2</th>
+						<th>attribute_3</th>
+						<th>attribute_4</th>
+					</tr>
+				</thead>
+				<tbody id="example-list">
+					<tr id="${id}$" class="mengular-template example-list-template">
+						<td>${attribute_1}$</td>
+						<td>${attribute_2}$</td>
+						<td>${attribute_3}$</td>
+						<td>${attribute_4}$</td>
+					</tr>
+				</tbody>
+		</table>
+		</div>
+	</body>
+</html>

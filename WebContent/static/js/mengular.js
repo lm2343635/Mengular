@@ -86,7 +86,7 @@ var LEFT_SPLIT_STR = "${",
 	 * Find template id from any element of a template
 	 */ 
 	$.fn["mengularId"] = function() {
-		var parent = $(this).parent();
+		var parent = $(this);
 		while(parent.attr("id") == undefined) {
 			parent = parent.parent();
 		}

@@ -233,3 +233,5 @@ or in DWR using
 
 	//DWR Framework
 	String rootPath=WebContextFactory.get().getServletContext().getRealPath("/");
+	
+method `setLoop()` must called before method `setValue()`, that's beacuse `setLoop()` uses placeholder `#{}#` while `setValue()` uses placeholder `#{}`. If we call `setValue()` at fisrt, the placeholder for `setLoop()` will be destoried before it called.

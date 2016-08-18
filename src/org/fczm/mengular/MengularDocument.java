@@ -16,7 +16,7 @@ import java.util.TreeMap;
 
 /**
  * Mengular Document for Java Template Engine
- * @version 2.1
+ * @version 2.2
  * @author 浮尘追梦
  */
 public class MengularDocument {
@@ -41,6 +41,11 @@ public class MengularDocument {
 	
 	public String getRootPath() {
 		return rootPath;
+	}
+	
+	public String getDocument() {
+		createLoopDocument();
+		return document;
 	}
 	
 	/**
@@ -81,7 +86,7 @@ public class MengularDocument {
 	private void init(String templatePath, int depth, String templateCharacterEncoding) {
 		this.depth = depth;
 		File templateFile = new File(rootPath + templatePath);
-		if(!templateFile.isFile()||!templateFile.exists()) {
+		if(!templateFile.isFile() || !templateFile.exists()) {
 			try {
 				throw new Exception("Mengular Document: Template file not found.");
 			} catch (Exception e) {
@@ -93,19 +98,19 @@ public class MengularDocument {
 			InputStreamReader streamReader = new InputStreamReader(new FileInputStream(templateFile), templateCharacterEncoding);
 			BufferedReader bufferedReader = new BufferedReader(streamReader);
 			String line = null;
-			paragraphs = new ArrayList <  > ();
-			templates = new TreeMap <  > ();
+			paragraphs = new ArrayList<>();
+			templates = new TreeMap<>();
 			String paragraph = "", template = "", key = null;
 			boolean isTemplate = false;
 			while((line = bufferedReader.readLine()) != null) {
-				if(line.contains(" < !--mengular-start")) {
+				if(line.contains("<!--mengular-start")) {
 					paragraphs.add(paragraph);
 					paragraph = "";
 					isTemplate = true;
-					key = line.split("mengular-start = \"")[1].split("\"")[0];
+					key = line.split("mengular-start=\"")[1].split("\"")[0];
 					continue;
 				}
-				if(line.contains(" < !--mengular-end-- > ")) {
+				if(line.contains("<!--mengular-end-->")) {
 					if(key == null) {
 						throw new Exception("No mengular start tag found!");
 					}
@@ -124,7 +129,7 @@ public class MengularDocument {
 			paragraphs.add(paragraph);
 			bufferedReader.close();
 			
-			loops = new TreeMap <  > ();
+			loops = new TreeMap<>();
 			for(String k: templates.keySet()) {
 				loops.put(k, "");
 			}
@@ -139,6 +144,11 @@ public class MengularDocument {
 	 * @param value 占位符值
 	 */
 	public void setValue(String key, String value) {
+		createLoopDocument();
+		document = document.replace("#{" + key + "}", value);
+	}
+	
+	private void createLoopDocument() {
 		//如果设置可以循环，则关闭设置循环并生成整体文档
 		if(setLoopEnable) {
 			setLoopEnable = false;
@@ -146,17 +156,16 @@ public class MengularDocument {
 			for(String paragraph: paragraphs) {
 				document += paragraph;
 				if(loops.size() > 0) {
-					document += loops.get(loops.firstKey());
-					loops.remove(loops.firstKey());
+					document += loops.get(loops.lastKey());
+					loops.remove(loops.lastKey());
 				}
 			}
 			String back = "";
 			for(int i = 0; i < depth; i++) {
 				back += "../";
 			}
-			document = document.replace("href = \"", "href = \"" + back).replace("src = \"", "src = \"" + back);
+			document = document.replace("href=\"", "href=\"" + back).replace("src=\"", "src=\"" + back);
 		}
-		document = document.replace("#{" + key + "}", value);
 	}
 	
 	/**
@@ -164,7 +173,7 @@ public class MengularDocument {
 	 * @param id 循环id
 	 * @param items 循环值
 	 */
-	public void setLoop(String id, List < Map < String, String >  >  items) {
+	public void setLoop(String id, List<Map<String, String>>  items) {
 		if(!setLoopEnable) {
 			try {
 				throw new Exception("Mengular Document: Cannot set loop after setting placeholder value.");
@@ -175,7 +184,7 @@ public class MengularDocument {
 		String template = templates.get(id);
 		if(template == null) {
 			try {
-				throw new Exception("Mengular Document: Cannot found template where id = " + id);
+				throw new Exception("Mengular Document: Cannot found template where id=" + id);
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -204,6 +213,7 @@ public class MengularDocument {
 	 * @param outputCharacterEncoding 自定义输出文件文字编码
 	 */
 	public void output(String outputCharacterEncoding) {
+		createLoopDocument();
 		File output = new File(rootPath + outputPath);
 		try {
 			if (!output.exists()) {

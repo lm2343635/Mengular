@@ -1,5 +1,5 @@
 /*!
- * mengular v3.3, http://github.com/lm2343635/Mengular
+ * mengular v3.4, http://github.com/lm2343635/Mengular
  * ===================================
  * Powerful jQuery plugin for ajax table loading.
  *
@@ -21,17 +21,21 @@ var LEFT_SPLIT_STR = "${",
 	$.fn["mengular"] = function(template, data) {
 		//get outer html content of element
 		template = $(template).prop("outerHTML");
+		if (template == null) {
+			console.log("Cannot find element by this template selector.");
+			return;
+		}
 		//get placeholders by spliting html document
 		var htmlArray = template.split(LEFT_SPLIT_STR);
 		var placeholders = new Array();
-		for(var i = 1; i < htmlArray.length; i++) {
+		for (var i = 1; i < htmlArray.length; i++) {
 			//placeholder is like "${placeholder name}$"
 			placeholders[i-1] = htmlArray[i].split(RIGHT_SPLIT_STR)[0];
 		}
 		//handle data for array
-		if(data instanceof Array) {
+		if (data instanceof Array) {
 			var output = "";
-			for(var i in data) {
+			for (var i in data) {
 				output += generateItem(template, placeholders, data[i]);;
 			}
 			$(this).append(output);
@@ -46,8 +50,9 @@ var LEFT_SPLIT_STR = "${",
 	 */
 	$.fn["mengularClear"] = function() {
 		$(this).children().each(function() {
-			if(!$(this).hasClass(MENGULAR_TEMPLATE_CLASS))
+			if (!$(this).hasClass(MENGULAR_TEMPLATE_CLASS)) {
 				$(this).remove();
+			}
 		});
 	};
 
@@ -56,7 +61,7 @@ var LEFT_SPLIT_STR = "${",
 	 */
 	$.fn["mengularClearTemplate"] = function() {
 		$(this).children().each(function() {
-			if($(this).hasClass(MENGULAR_TEMPLATE_CLASS)) {
+			if ($(this).hasClass(MENGULAR_TEMPLATE_CLASS)) {
 				$(this).remove();
 			}
 		});
@@ -72,9 +77,9 @@ var LEFT_SPLIT_STR = "${",
 	 * }
 	 * Be careful that this fill text method will reload dom element, so that all event will be removed after using this method to a dom element.
 	 */
-	$.fn["fillText"]=function(data) {
+	$.fn["fillText"] = function(data) {
 		var html = $(this).prop("outerHTML");
-		for(var key in data) {
+		for (var key in data) {
 			do {
 				html = html.replace("@{"+key+"}", data[key]);
 			} while(html.search("@{"+key+"}") != -1);
@@ -87,7 +92,7 @@ var LEFT_SPLIT_STR = "${",
 	 */ 
 	$.fn["mengularId"] = function() {
 		var parent = $(this);
-		while(parent.attr("id") == undefined) {
+		while (parent.attr("id") == undefined) {
 			parent = parent.parent();
 		}
 		return parent.attr("id");
@@ -99,7 +104,7 @@ var LEFT_SPLIT_STR = "${",
  * @param data
  */
 function fillText(data) {
-	for(var attributeName in data) {
+	for (var attributeName in data) {
 		$("#" + attributeName).text(data[attributeName]);
 	}
 }
@@ -109,7 +114,7 @@ function fillText(data) {
  * @param data
  */
 function fillValue(data) {
-	for(var attributeName in data) {
+	for (var attributeName in data) {
 		$("#" + attributeName).val(data[attributeName]);
 	}
 }
@@ -123,7 +128,7 @@ function fillValue(data) {
  */
 function generateItem(template, placeholders, data) {
 	//replace placeholder with data attributes
-	for(var i in placeholders) {
+	for (var i in placeholders) {
 		template = template.replace(LEFT_SPLIT_STR + placeholders[i] + RIGHT_SPLIT_STR, eval("data." + placeholders[i]));
 	}
 	//remove mengular template class

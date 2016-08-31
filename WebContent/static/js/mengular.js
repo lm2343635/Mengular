@@ -81,8 +81,8 @@ var LEFT_SPLIT_STR = "${",
 		var html = $(this).prop("outerHTML");
 		for (var key in data) {
 			do {
-				html = html.replace("@{"+key+"}", data[key]);
-			} while(html.search("@{"+key+"}") != -1);
+				html = html.replace("@{" + key + "}", data[key]);
+			} while(html.search("@{" + key + "}") != -1);
 		}
 		$(this).prop("outerHTML", html);
 	};

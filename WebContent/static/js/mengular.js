@@ -1,5 +1,5 @@
 /*!
- * mengular v3.4, http://github.com/lm2343635/Mengular
+ * mengular v3.5, http://github.com/lm2343635/Mengular
  * ===================================
  * Powerful jQuery plugin for ajax table loading.
  *
@@ -95,7 +95,7 @@ var LEFT_SPLIT_STR = "${",
 		while (parent.attr("id") == undefined) {
 			parent = parent.parent();
 		}
-		return parent.attr("id");
+		return parent.hasClass(MENGULAR_TEMPLATE_CLASS)? null: parent.attr("id");
 	}
 })(window.jQuery);
 

@@ -6,7 +6,7 @@ import java.util.regex.Pattern;
 /**
  * 数学操作工具
  * @author 浮尘追梦
- * @version 1.0
+ * @version 1.1
  */
 public class MathTool  {
 	// 定义精度范围
@@ -19,16 +19,16 @@ public class MathTool  {
 	 * @return
 	 */
 	public static int [] getRandom(int need, int range) {
-		int [] rands=new int[need];
-		Random random=new Random ();  
-        boolean[] bool=new boolean[range];
-        int randInt=0;  
-        for(int i=0;i<need;i++) {
+		int [] rands = new int[need];
+		Random random = new Random ();  
+        boolean[] bool = new boolean[range];
+        int randInt = 0;  
+        for(int i = 0;i < need; i++) {
         	do {
         		randInt=random.nextInt(range);  
         	} while(bool[randInt]);
-        	bool[randInt]=true;  
-        	rands[i]=randInt;
+        	bool[randInt] = true;  
+        	rands[i] = randInt;
         }
         return rands;
 	}
@@ -48,10 +48,10 @@ public class MathTool  {
 	 * @return
 	 */
 	public static String getRandomStr(int length) {
-		int [] randoms=getRandom(length, 9);
-		String str="";
-		for(int i : randoms)
-			str+=i;
+		String str = "";
+		for(int i = 0; i < length; i++ ) {
+			str += getRandom(9);
+		}
 		return str;
 	}
 	
@@ -84,4 +84,5 @@ public class MathTool  {
 			return true;
 		return false;
 	}
+	
 }

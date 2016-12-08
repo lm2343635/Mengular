@@ -9,7 +9,7 @@ Let me introduce the 2 parts: JS Ajax Loaing and Java Template Engine.
 
 **JS Ajax Loading** of Mengular framework is a ajax loading framwork in web broswer, aiming to provide a easy and flexible way to load JSON array in your web page. 
 ###Loaing CSS and JS Files
-At first we shold import js file and css file to our HTML document.
+At first we should import js file and css file to our HTML document.
 
 	<link href="static/css/mengular.css" rel="stylesheet">
 	<script src="static/js/jquery.min.js"></script>
